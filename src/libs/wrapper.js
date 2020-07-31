@@ -21,6 +21,7 @@ export class ElementWrapper extends Wrapper {
         console.log('name', name, value)
         if (name.match(/^on[\s\S]+$/)) {
             const eventName = RegExp.$1.toLowerCase()
+            console.log(eventName)
             this.root.addEventListener(eventName, value)
         } else {
             if (name === "className") name = "class";

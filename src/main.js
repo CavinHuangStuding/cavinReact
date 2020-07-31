@@ -36,10 +36,7 @@ class Square extends Component {
 
 class Board extends Component {
   renderSquare(i) {
-    return <Square
-      value={i}
-      onClick={() => this.props.onClick(i)}
-    />;
+    return <Square value={i} />
   }
 
   render() {
