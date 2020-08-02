@@ -1,14 +1,15 @@
 
 class Wrapper {
     constructor(type, attrs) {
+        this.type = type
         this.root = document.createElement(type)
         this.children = []
+        this.props = Object.create(null)
     }
     mount(range) {
         // 先清除
         range.deleteContents()
         // 再插入
-        console.log('+++++++++++', this.root, range)
         range.insertNode(this.root)
     }
 }
@@ -18,10 +19,8 @@ export class ElementWrapper extends Wrapper {
         super(type)
     }
     setAttribute(name, value = null) {
-        console.log('name', name, value)
-        if (name.match(/^on[\s\S]+$/)) {
+        if (name.match(/^on([\s\S]+)$/)) {
             const eventName = RegExp.$1.toLowerCase()
-            console.log(eventName)
             this.root.addEventListener(eventName, value)
         } else {
             if (name === "className") name = "class";
@@ -48,5 +47,6 @@ export class TextWrapper extends Wrapper {
     constructor(text) {
         super()
         this.root = document.createTextNode(text)
+        this.type = '#text'
     }
 }

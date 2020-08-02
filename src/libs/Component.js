@@ -1,7 +1,10 @@
+import { mergeData } from './utils'
+import { replace } from './vnode'
 export class Component {
     constructor() {
         this.children = []
         this.props = Object.create(null)
+        this.state = Object.create(null)
     }
     setAttribute(name, value) {
         this[name] = value
@@ -13,7 +16,6 @@ export class Component {
     mount(range) {
         this.range = range
         this.update()
-        console.log('mounted')
     }
     update() {
         // 更新之前当前位置先插入一个注释占位
@@ -23,11 +25,25 @@ export class Component {
         // range.insertNode(document.createComment("placeholder"));
 
         // 再清除当前节点
-        this.range.deleteContents();
-
+        // this.range.deleteContents();
+        // 对比节点更新局部更新,dispatch
         const vdom = this.render();
-        // 最后 mount
-        vdom.mount(this.range);
-        console.log('=====components', this.range, vdom)
+        if (this.oldVdom) {
+            replace(vdom, this.oldVdom)
+        } else {
+            // 最后 mount
+            vdom.mount(this.range);
+        }
+        this.oldVdom = vdom
+    }
+    setState (state) {
+        if (!this.state && state) {
+            this.state = Object.create(null)
+        }
+        mergeData(this.state, state)
+        this.update()
+    }
+    get vdom () {
+        return this.render()
     }
 }
