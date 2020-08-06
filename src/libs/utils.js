@@ -18,54 +18,26 @@ export function dataType (value) {
  * @param {String} stand 合并标准，默认为左树标准
  * @returns {void} 无返回值
  */
-export function mergeData (target, origin, stand = 'left') {
-    if (!target || !origin) {
+export function mergeData (oldState, newState) {
+    if (!oldState || !newState) {
       return
     }
-    if (dataType(target) !== dataType(origin)) {
+    if (dataType(oldState) !== dataType(newState)) {
       console.error('目标对象与源对象的数据类型不同，无法实现合并')
       return
     }
-  
-    let flag = stand === 'left'
-    for (let prop in target) {
-      if (dataType(target[prop]) === 'object') {
-        // target[prop] = (target[prop].constructor === Array) ? [] : {}// 三元运算，将s[prop]初始化为数组或者对象
-        mergeData(target[prop], origin[prop])
-      } else if (dataType(target[prop]) === 'array') {
-        // 兼容处理
-        if (!origin[prop]) {
-          origin[prop] = []
+    for (let p in newState) {
+      if (dataType(newState[p]) === 'object' && newState[p] !== null) {
+        if (dataType(oldState[p] !== 'object')) {
+          if (newState instanceof Array) {
+            oldState[p] = []
+          } else {
+            oldState[p] = {}
+          }
         }
-        if (origin[prop].length > 0) {
-          // 该条件是为了剔除重复的数据
-          target[prop].length = 0
-        }
-        target[prop].push(...origin[prop])
+        mergeData(oldState[p], newState[p])
       } else {
-        let defaultVal
-        switch (dataType(target[prop])) {
-          case 'object':
-            defaultVal = flag ? (target[prop] || {}) : (origin[prop] || {})
-            break
-          case 'array':
-            // defaultVal = target[prop] || []
-            defaultVal = flag ? (target[prop] || []) : (origin[prop] || [])
-            break
-          case 'string':
-            // defaultVal = target[prop] || ''
-            defaultVal = flag ? (target[prop] || '') : (origin[prop] || '')
-            break
-          case 'number':
-            // defaultVal = target[prop] || 0
-            defaultVal = flag ? (target[prop] || 0) : (origin[prop] || 0)
-            break
-          case 'boolean':
-            // defaultVal = target[prop] || false
-            defaultVal = flag ? (target[prop] || false) : (origin[prop] || false)
-            break
-        }
-        target[prop] = (origin[prop] || defaultVal)
+        oldState[p] = newState[p]
       }
     }
   }

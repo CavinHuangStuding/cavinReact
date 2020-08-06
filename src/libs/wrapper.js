@@ -7,10 +7,40 @@ class Wrapper {
         this.props = Object.create(null)
     }
     mount(range) {
+        this.range = range
         // 先清除
         range.deleteContents()
         // 再插入
+        let element = document.createElement(this.type)
+
+        for (let name in this.props) {
+            var value = this.props[name]
+                
+            if (name.match(/^on([\s\S]+)$/)) {
+                const eventName = RegExp.$1.toLowerCase()
+                element.addEventListener(eventName, value)
+            } else {
+                if (name === "className") name = "class";
+                element.setAttribute(name, value)
+            }
+        }
+
+        for (let child of this.children) {
+            let range = document.createRange()
+            if (element.children.length) {
+                range.setStartAfter(element.lastChild)
+                range.setEndAfter(element.lastChild)
+            } else {
+                range.setStartAfter(element, 0)
+                range.setEndAfter(element, 0)
+            }
+            child.mount(range)
+        }
+
         range.insertNode(this.root)
+    }
+    get vdom() {
+        return this
     }
 }
 
@@ -19,27 +49,11 @@ export class ElementWrapper extends Wrapper {
         super(type)
     }
     setAttribute(name, value = null) {
-        if (name.match(/^on([\s\S]+)$/)) {
-            const eventName = RegExp.$1.toLowerCase()
-            this.root.addEventListener(eventName, value)
-        } else {
-            if (name === "className") name = "class";
-            this.root.setAttribute(name, value)
-        }
+        
+        this.props[name] = value
     }
     appendChild(vChild) {
-        const range = document.createRange();
-
-        if (this.root.children.length) {
-            // 如果有子元素，则添加在最后
-            range.setStartAfter(this.root.lastChild);
-            range.setEndAfter(this.root.lastChild);
-        } else {
-            range.setStart(this.root, 0);
-            range.setEnd(this.root, 0);
-        }
-
-        vChild.mount(range);
+        this.children.push(vChild)
     }
 }
 

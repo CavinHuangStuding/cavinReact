@@ -3,7 +3,7 @@ export const isSameNode = (node1, node2) => {
     
     for (const name in node1.props) {
         if (typeof node1.props[name] === 'object' && 
-            typeof node2.props[name] && 
+            typeof node2.props[name] === 'object' && 
             JSON.stringify(node1.props[name]) === JSON.stringify(node2.props[name])) {
                 continue
             }
@@ -11,7 +11,6 @@ export const isSameNode = (node1, node2) => {
             return false
         }
     }
-    console.log(node1, node2)
     if (Object.keys(node1.props).length !== Object.keys(node2.props).length) {
         return false
     }
@@ -24,7 +23,9 @@ export const isSameTree = (node1, node2) => {
     const len = node1.children.length
     if (len !== node2.children.length) return false
     for (let i = 0; i < len; i++) {
-        if (!isSameTree(node1.children[i], node2.children[i])) return false
+        if (!isSameTree(node1.children[i], node2.children[i])) {
+            return false
+        }
     }
     return true
 }

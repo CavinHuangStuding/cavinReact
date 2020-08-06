@@ -11,7 +11,6 @@ const CavinReact = {
       // 外部继承对象，这里的 type 对象默认认为它继承了 Component
       element = new type()
     }
-    console.log(element)
     for (let name in attrs) {
       element.setAttribute(name, attrs[name])
     }
