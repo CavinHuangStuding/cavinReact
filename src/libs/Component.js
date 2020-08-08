@@ -6,6 +6,9 @@ export class Component {
         this.props = Object.create(null)
         this.state = Object.create(null)
     }
+    get type() {
+        return this.constructor.name
+    }
     setAttribute(name, value) {
         this[name] = value
         this.props[name] = value
@@ -28,6 +31,7 @@ export class Component {
         // this.range.deleteContents();
         // 对比节点更新局部更新,dispatch
         const vdom = this.vdom;
+        console.log(this.range)
         if (this.oldVdom) {
             const isSameNode = (node1, node2) => {
                 if (node1.type !== node2.type) return false
@@ -65,6 +69,7 @@ export class Component {
             const replace = (newTree, oldTree, indent = '') => {
                 console.log(indent + 'new:', newTree)
                 console.log(indent + 'old:', oldTree)
+                if (!newTree || !oldTree) return true
                 if (isSameTree(newTree, oldTree)) {
                     console.log('all same')
                     return true
@@ -74,7 +79,7 @@ export class Component {
                     newTree.mount(oldTree.range)
                 } else {
                     for (let i = 0; i < newTree.children.length; i++) {
-                        replace(newTree.children[i], oldTree.children[i], '  ' + index)
+                        replace(newTree.children[i], oldTree.children[i], '  ' + indent)
                     }
                 }
             }

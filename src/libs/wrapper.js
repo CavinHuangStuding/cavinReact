@@ -1,17 +1,34 @@
-
-class Wrapper {
-    constructor(type, attrs) {
+const childrenSymbol = Symbol('children')
+export class ElementWrapper {
+    constructor(type) {
         this.type = type
-        this.root = document.createElement(type)
-        this.children = []
         this.props = Object.create(null)
+        this[childrenSymbol] = []
+        this.children = []
+    }
+    setAttribute(name, value = null) {
+        this.props[name] = value
+    }
+    appendChild(vChild) {
+        this.children.push(vChild)
+        this[childrenSymbol].push(vChild)
+    }
+    get vdom() {
+        return this
     }
     mount(range) {
         this.range = range
+        let placeholder = document.createComment('placeholder')
+        let endRange = document.createRange()
+        endRange.setStart(range.endContainer, range.endOffset)
+        endRange.setEnd(range.endContainer, range.endOffset)
+        endRange.insertNode(placeholder)
+
         // 先清除
         range.deleteContents()
         // 再插入
         let element = document.createElement(this.type)
+        console.log(element)
 
         for (let name in this.props) {
             var value = this.props[name]
@@ -31,36 +48,30 @@ class Wrapper {
                 range.setStartAfter(element.lastChild)
                 range.setEndAfter(element.lastChild)
             } else {
-                range.setStartAfter(element, 0)
-                range.setEndAfter(element, 0)
+                range.setStart(element, 0)
+                range.setEnd(element, 0)
             }
             child.mount(range)
         }
 
+        range.insertNode(element)
+    }
+   
+}
+
+export class TextWrapper {
+    constructor(text) {
+        this.children = []
+        this.root = document.createTextNode(text)
+        this.type = '#text'
+        this.props = Object.create(null)
+    }
+    mount(range) {
+        this.range = range
+        range.deleteContents()
         range.insertNode(this.root)
     }
     get vdom() {
         return this
-    }
-}
-
-export class ElementWrapper extends Wrapper {
-    constructor(type) {
-        super(type)
-    }
-    setAttribute(name, value = null) {
-        
-        this.props[name] = value
-    }
-    appendChild(vChild) {
-        this.children.push(vChild)
-    }
-}
-
-export class TextWrapper extends Wrapper {
-    constructor(text) {
-        super()
-        this.root = document.createTextNode(text)
-        this.type = '#text'
     }
 }
