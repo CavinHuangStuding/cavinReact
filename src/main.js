@@ -1,4 +1,4 @@
-import { CavinReact, Component } from './libs'
+import { CavinReact, Component } from './cavinReact'
 class Square extends Component {
   render () {
     return (
