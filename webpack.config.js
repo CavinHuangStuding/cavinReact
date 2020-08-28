@@ -7,7 +7,8 @@ const resolve = (dir) => path.resolve(__dirname, dir)
 module.exports = {
     mode: 'development',
     entry: {
-        app: './src/main.js'
+        app: './src/main.js',
+        snabbdom: './src/snabbdom/index.js'
     },
     output: {
         filename: '[name].bundle.js',
@@ -39,6 +40,13 @@ module.exports = {
         template: './src/index.html',
         // favicon: './static/favicon.ico',
         inject: 'body'
+      }),
+      new HtmlWebpackPlugin({
+        filename: 'snabbdom.html',
+        template: './src/snabbdom/index.html',
+        // favicon: './static/favicon.ico',
+        inject: 'body',
+        chunks: ['snabbdom']
       })
     ],
     devtool: 'inline-source-map',
