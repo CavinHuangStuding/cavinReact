@@ -27,7 +27,7 @@ export class Component {
         // 再清除当前节点
         // this.range.deleteContents();
         // 对比节点更新局部更新,dispatch
-        const vdom = this.render();
+        const vdom = this.vdom;
         if (this.oldVdom) {
             replace(vdom, this.oldVdom)
         } else {
@@ -36,14 +36,14 @@ export class Component {
         }
         this.oldVdom = vdom
     }
-    setState (state) {
+    setState(state) {
         if (!this.state && state) {
             this.state = Object.create(null)
         }
         mergeData(this.state, state)
         this.update()
     }
-    get vdom () {
+    get vdom() {
         return this.render()
     }
 }
