@@ -1,7 +1,7 @@
 import {
-    init, 
+    init,
     h
- } from 'snabbdom'
+} from 'snabbdom'
 // 1. 导入模块
 import StyleModule from 'snabbdom/modules/style'
 import ClassModule from 'snabbdom/modules/class'
@@ -45,7 +45,7 @@ data.unshift({
 var container = document.getElementById('app')
 var vnode;
 function render(data) {
-    var newVnode = h('table', {}, data.map(function (item) {
+    var newVnode = h('table', { props: { 'className': '10' } }, data.map(function (item) {
         var tds = []
         var i
         for (i in item) {
