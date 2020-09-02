@@ -2,6 +2,9 @@ import { h } from "snabbdom"
 
 const childrenSymbol = Symbol("children")
 
+/**
+ * element 处理类构造vdom
+ */
 export class ElementWrapper {
     constructor(type) {
         this.type = type
@@ -36,6 +39,9 @@ export class ElementWrapper {
     }
 }
 
+/**
+ * 文字节点处理类 
+ */
 export class TextWrapper {
     constructor(content) {
         this.type = '#text'

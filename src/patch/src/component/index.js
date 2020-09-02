@@ -1,4 +1,8 @@
 import { patch } from '../patch'
+
+/**
+ * 定义class 组件
+ */
 export class Component {
     constructor() {
         this.children = []
@@ -28,11 +32,13 @@ export class Component {
         const vdom = this.vdom
         let newVnode = vdom.mount()
         if (this.oldVdom) {
+            // 前后节点对比挂载
             patch(this.oldVdom, newVnode)
         }
         this.oldVdom = newVnode
         return newVnode
     }
+    // 增量更新state，并更新虚拟dom
     setState(state) {
         const merge = (oldState, newState) => {
             for (let p in newState) {
@@ -54,7 +60,6 @@ export class Component {
             this.state = {}
         }
         merge(this.state, state)
-        console.log(this.state)
         this.update()
     }
 }

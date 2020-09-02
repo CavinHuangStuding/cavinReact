@@ -1,6 +1,10 @@
 import { ElementWrapper, TextWrapper } from '../wrapper'
 import { Component } from '../component'
 import { patch } from '../patch';
+
+/**
+ * 初始化
+ */
 export const CavinReact = {
 
     createElement(type, attributes, ...children) {
@@ -11,6 +15,7 @@ export const CavinReact = {
             element = new type
         }
 
+        // 根据各个处理类加入attrs
         for (let name in attributes) {
             element.setAttribute(name, attributes[name]);
         }
