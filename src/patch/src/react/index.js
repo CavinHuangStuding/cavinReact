@@ -20,6 +20,7 @@ export const CavinReact = {
             element.setAttribute(name, attributes[name]);
         }
 
+        // 递归插入子节点
         const insertChildren = (children) => {
             for (let child of children) {
                 if (typeof child === 'object' && child instanceof Array) {
@@ -45,6 +46,7 @@ export const CavinReact = {
     },
 
     render(vdom, element) {
+        // 整体render
         const vnode = vdom.mount()
         patch(element, vnode)
     }
