@@ -9,7 +9,8 @@ module.exports = {
   entry: {
     range: './src/range/main.js',
     patch: './src/patch/main.js',
-    snabbdom: './src/snabbdom/index.js'
+    snabbdom: './src/snabbdom/index.js',
+    dom: './src/dom/main.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -63,6 +64,13 @@ module.exports = {
       // favicon: './static/favicon.ico',
       inject: 'body',
       chunks: ['range']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'dom.html',
+      template: './src/dom/index.html',
+      // favicon: './static/favicon.ico',
+      inject: 'body',
+      chunks: ['dom']
     })
   ],
   devtool: 'inline-source-map',
